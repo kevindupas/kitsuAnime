@@ -333,14 +333,34 @@ try {
 
 ## Endpoints Utilisés
 
-| Fonction | Endpoint | Limite |
-|----------|----------|---------|
-| `fetchCurrentlyAiringAnime` | `/anime?filter[status]=current` | 20 |
-| `fetchUpcomingAnime` | `/anime?filter[status]=upcoming` | 20 |
-| `searchAnime` | `/anime?filter[text]={query}` | 20 |
+| Fonction | Endpoint Complet | Limite |
+|----------|------------------|---------|
+| `fetchCurrentlyAiringAnime` | `/anime?filter[status]=current&sort=-startDate&page[limit]=20&include=categories` | 20 |
+| `fetchUpcomingAnime` | `/anime?filter[status]=upcoming&sort=startDate&page[limit]=20&include=categories` | 20 |
+| `searchAnime` | `/anime?filter[text]={query}&page[limit]=20` | 20 |
 | `fetchAnimeById` | `/anime/{id}` | 1 |
-| `fetchEpisodeById` | `/episodes/{id}` | 1 |
-| `fetchEpisodesByAnimeId` | `/anime/{id}/episodes` | 20 |
+| `fetchEpisodeById` | `/episodes/{id}?include=media` | 1 |
+| `fetchEpisodesByAnimeId` | `/anime/{id}/episodes?sort=number&page[limit]=20` | 20 |
 | `fetchAnimeCategories` | `/anime/{id}/categories` | Toutes |
-| `fetchAllCategories` | `/categories` | 40 |
-| `searchAnimeByCategory` | `/categories/{id}/anime` | 20 |
+| `fetchAllCategories` | `/categories?page[limit]=40&sort=title` | 40 |
+| `searchAnimeByCategory` | `/categories/{id}/anime?page[limit]=20` | 20 |
+
+### Paramètres Importants
+
+**Filtres :**
+- `filter[status]=current` : Animes en cours de diffusion
+- `filter[status]=upcoming` : Animes à venir
+- `filter[text]={query}` : Recherche textuelle
+
+**Tri :**
+- `sort=-startDate` : Par date de début décroissante (récents d'abord)
+- `sort=startDate` : Par date de début croissante (prochains d'abord)
+- `sort=number` : Par numéro d'épisode
+- `sort=title` : Par ordre alphabétique
+
+**Inclusions :**
+- `include=categories` : Inclut les genres/catégories
+- `include=media` : Inclut les données de l'anime parent
+
+**Pagination :**
+- `page[limit]=X` : Limite le nombre de résultats
